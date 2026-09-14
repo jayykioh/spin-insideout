@@ -1,10 +1,11 @@
 import { FormEvent, useEffect, useState } from 'react'
 import { ArrowDown, Instagram } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
-import { APP_CONFIG, translations } from './content'
+import { APP_CONFIG, translations, COUNTRIES } from './content'
 import { Roulette } from './components/Roulette'
 import { ResultModal } from './components/ResultModal'
 import { CountrySelect } from './components/CountrySelect'
+import { CountryFlag } from './components/CountryFlag'
 import { ResultsFeed } from './components/ResultsFeed'
 import { postSpinToSheet } from './lib/sheetsApi'
 import {
@@ -168,55 +169,75 @@ const App = () => {
         <section className="form-section" id="form-section">
           <motion.div className="form-wrapper" {...reveal}>
             <div className="section-heading centered">
+              <span className="eyebrow">{translations.formKicker}</span>
               <h2>{translations.formTitle}</h2>
-              <p className="section-subtext">Fill in your information to unlock your grand opening roll.</p>
+              <p className="section-subtext">{translations.formSubtitle}</p>
             </div>
             
-            <form className={`entry-form ${registered ? 'registered' : ''}`} onSubmit={submitParticipant} noValidate>
-              <div className="form-fields">
-                <label>
-                  <span>{translations.name}</span>
-                  <input 
-                    value={participant.name} 
-                    onChange={(e) => setParticipant({ ...participant, name: e.target.value })} 
-                    placeholder={translations.namePlaceholder} 
-                    autoComplete="name" 
-                    aria-invalid={Boolean(errors.name)}
-                    disabled={registered || hasSpun}
-                  />
-                  {errors.name ? <small>{translations[errors.name]}</small> : null}
-                </label>
+            {registered ? (
+              <div className="verified-pass">
+                <div className="verified-pass-main">
+                  <div className="verified-status">
+                    <span className="status-dot" aria-hidden="true" />
+                    <span>GUEST VERIFIED</span>
+                  </div>
+                  <div className="verified-info">
+                    <strong className="verified-name">{participant.name}</strong>
+                    <div className="verified-country">
+                      <CountryFlag code={participant.country} />
+                      <span>{COUNTRIES.find(c => c.code === participant.country)?.name || participant.country}</span>
+                    </div>
+                  </div>
+                </div>
                 
-                <label>
-                  <span>{translations.country}</span>
-                  <CountrySelect 
-                    value={participant.country}
-                    onChange={(val) => setParticipant({ ...participant, country: val })}
-                    error={errors.country}
-                  />
-                  {errors.country ? <small>{translations[errors.country]}</small> : null}
-                </label>
-              </div>
-
-              <p className="privacy-note">{translations.privacy}</p>
-              
-              {!registered && !hasSpun ? (
-                <button className="button button--primary form-submit" type="submit">
-                  {translations.continue} <ArrowDown size={18} />
-                </button>
-              ) : (
-                <div className="unlocked-banner">
-                  <span>✓ Verified: <strong>{participant.name}</strong></span>
+                <div className="verified-actions">
                   {!hasSpun && (
-                    <button type="button" className="btn-edit" onClick={() => setRegistered(false)}>
-                      Edit
+                    <button type="button" className="verified-edit-btn" onClick={() => setRegistered(false)}>
+                      Edit Details
                     </button>
                   )}
+                  <a href="#roulette-section" className="verified-scroll-link">
+                    <span>Ready to roll</span>
+                    <ArrowDown size={14} />
+                  </a>
                 </div>
-              )}
-              
-              {notice && <p className="notice" role="status">{notice}</p>}
-            </form>
+              </div>
+            ) : (
+              <form className="entry-form" onSubmit={submitParticipant} noValidate>
+                <div className="form-fields">
+                  <label>
+                    <span>{translations.name}</span>
+                    <input 
+                      value={participant.name} 
+                      onChange={(e) => setParticipant({ ...participant, name: e.target.value })} 
+                      placeholder={translations.namePlaceholder} 
+                      autoComplete="name" 
+                      aria-invalid={Boolean(errors.name)}
+                    />
+                    {errors.name ? <small>{translations[errors.name]}</small> : null}
+                  </label>
+                  
+                  <label>
+                    <span>{translations.country}</span>
+                    <CountrySelect 
+                      value={participant.country}
+                      onChange={(val) => setParticipant({ ...participant, country: val })}
+                      error={errors.country}
+                    />
+                    {errors.country ? <small>{translations[errors.country]}</small> : null}
+                  </label>
+                </div>
+
+                <div className="form-footer">
+                  <button className="button button--primary form-submit" type="submit">
+                    {translations.continue} <ArrowDown size={16} />
+                  </button>
+                  <p className="privacy-note">{translations.privacy}</p>
+                </div>
+                
+                {notice && <p className="notice" role="status">{notice}</p>}
+              </form>
+            )}
           </motion.div>
         </section>
 

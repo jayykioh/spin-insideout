@@ -24,23 +24,8 @@ export const prizeVisuals: Record<PrizeId, {
   'try-again': { color: '#333333', accent: '#888888', label: 'NEXT TIME' },
 }
 
-export const COUNTRIES = [
-  { code: 'VN', name: 'Vietnam', flag: '🇻🇳' },
-  { code: 'US', name: 'United States', flag: '🇺🇸' },
-  { code: 'KR', name: 'South Korea', flag: '🇰🇷' },
-  { code: 'JP', name: 'Japan', flag: '🇯🇵' },
-  { code: 'CN', name: 'China', flag: '🇨🇳' },
-  { code: 'TH', name: 'Thailand', flag: '🇹🇭' },
-  { code: 'SG', name: 'Singapore', flag: '🇸🇬' },
-  { code: 'AU', name: 'Australia', flag: '🇦🇺' },
-  { code: 'GB', name: 'United Kingdom', flag: '🇬🇧' },
-  { code: 'FR', name: 'France', flag: '🇫🇷' },
-  { code: 'DE', name: 'Germany', flag: '🇩🇪' },
-  { code: 'CA', name: 'Canada', flag: '🇨🇦' },
-  { code: 'TW', name: 'Taiwan', flag: '🇹🇼' },
-  { code: 'HK', name: 'Hong Kong', flag: '🇭🇰' },
-  { code: 'MY', name: 'Malaysia', flag: '🇲🇾' },
-]
+export { UNIQUE_COUNTRIES as COUNTRIES } from './data/countries'
+export type { Country } from './data/countries'
 
 export const prizeNames: Record<PrizeId, string> = {
   grand: 'Inside Out T-shirt',
@@ -65,12 +50,13 @@ export const translations = {
   aboutTitle: 'About Inside Out',
   aboutBody: 'From D13 An Thuong 34, three friends — Phu, Tai, and Luc — birthed Innoir. On that same street, with the same minds, Inside Out was born as the second child. Not a continuation, but a different chapter — a streetwear label focused on pieces that just feel right when you put them on. No sloppy materials, no copied designs — because we wear what we sell.',
   
-  formKicker: 'Your turn',
-  formTitle: 'A little detail. A delightful surprise.',
-  name: 'Full name', namePlaceholder: 'Alex Nguyen',
+  formKicker: 'STEP 01',
+  formTitle: 'Guest Information',
+  formSubtitle: 'Enter your details to unlock your lucky roll.',
+  name: 'Full name', namePlaceholder: 'e.g. Alex Nguyen',
   country: 'Country', countryPlaceholder: 'Select your country',
-  privacy: 'Used only to verify your gift in store.',
-  continue: 'Unlock the wheel',
+  privacy: 'Used strictly for in-store gift verification.',
+  continue: 'Unlock Roulette',
   
   wheelKicker: 'Ready, set, feel!',
   wheelTitle: 'Roll for your opening gift',

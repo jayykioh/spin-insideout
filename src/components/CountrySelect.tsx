@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
-import { ChevronDown, Search, Check } from 'lucide-react'
+import { ChevronDown, Search, Check, X } from 'lucide-react'
 import { COUNTRIES } from '../content'
 import { CountryFlag } from './CountryFlag'
 
@@ -27,8 +27,15 @@ export const CountrySelect = ({ value, onChange, error }: CountrySelectProps) =>
         setIsOpen(false)
       }
     }
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsOpen(false)
+    }
     document.addEventListener('mousedown', handleClickOutside)
-    return () => document.removeEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
   }, [])
 
   return (
@@ -43,25 +50,39 @@ export const CountrySelect = ({ value, onChange, error }: CountrySelectProps) =>
           <span className="selected-value">
             <CountryFlag code={selectedCountry.code} name={selectedCountry.name} />
             <span className="name">{selectedCountry.name}</span>
+            <span className="code-pill">{selectedCountry.code}</span>
           </span>
         ) : (
           <span className="placeholder">Select your country</span>
         )}
-        <ChevronDown size={18} className={`chevron ${isOpen ? 'open' : ''}`} />
+        <ChevronDown size={16} className={`chevron ${isOpen ? 'open' : ''}`} />
       </button>
 
       {isOpen && (
         <div className="country-select-dropdown">
           <div className="search-box">
-            <Search size={16} />
+            <Search size={15} className="search-icon" />
             <input 
               type="text" 
-              placeholder="Search country..." 
+              placeholder="Search by name or code..." 
               value={search}
               onChange={e => setSearch(e.target.value)}
               onClick={e => e.stopPropagation()}
               autoFocus
             />
+            {search && (
+              <button
+                type="button"
+                className="search-clear-btn"
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setSearch('')
+                }}
+                aria-label="Clear search"
+              >
+                <X size={14} />
+              </button>
+            )}
           </div>
           <div className="country-list">
             {filteredCountries.map(country => (
@@ -77,11 +98,12 @@ export const CountrySelect = ({ value, onChange, error }: CountrySelectProps) =>
               >
                 <CountryFlag code={country.code} name={country.name} />
                 <span className="name">{country.name}</span>
-                {country.code === value && <Check size={16} className="check" />}
+                <span className="code-pill">{country.code}</span>
+                {country.code === value && <Check size={14} className="check" />}
               </button>
             ))}
             {filteredCountries.length === 0 && (
-              <div className="empty-state">No countries found</div>
+              <div className="empty-state">No country matching "{search}"</div>
             )}
           </div>
         </div>
