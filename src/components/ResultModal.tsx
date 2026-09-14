@@ -85,13 +85,13 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
             <button className="modal-close" onClick={onClose} aria-label={translations.close}><X size={20} /></button>
             <div className="result-card" ref={cardRef}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
-                <span style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff' }}>{result.name}</span>
-                <span style={{ color: '#888', fontWeight: 500 }}>({result.country})</span>
+                <span style={{ fontSize: 'clamp(1rem, 3.5vw, 1.2rem)', fontWeight: 600, color: '#fff' }}>{result.name}</span>
+                <span style={{ color: '#888', fontWeight: 500, fontSize: '0.95rem' }}>({result.country})</span>
               </div>
-              <p className="result-kicker" style={{ color: visual.color, fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <p className="result-kicker" style={{ color: visual.color, fontSize: 'clamp(0.85rem, 2.8vw, 1.05rem)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 {isLoss ? translations.resultLose : 'Congratulations! You won:'}
               </p>
-              <h2 id="result-title" className="result-name" style={{ fontSize: '2.5rem', margin: '8px 0 20px', lineHeight: 1.1, color: '#fff' }}>
+              <h2 id="result-title" className="result-name" style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', margin: '6px 0 14px', lineHeight: 1.15, color: '#fff' }}>
                 {getPrizeName(result.prizeId, result.mysteryDiscount)}
               </h2>
               
@@ -100,19 +100,19 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
                   src={visual.image}
                   alt={visual.label}
                   className={`result-image ${isLoss ? 'result-image--soft' : ''}`}
-                  style={{ marginBottom: '20px' }}
+                  style={{ marginBottom: '14px' }}
                 />
               ) : (
-                <div className="result-image-placeholder" style={{ marginBottom: '20px' }}></div>
+                <div className="result-image-placeholder" style={{ marginBottom: '14px' }}></div>
               )}
               
               {isLoss ? (
                 <p className="result-copy">{translations.resultLoseBody}</p>
               ) : (
-                <div style={{ backgroundColor: '#1a1c24', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                <div style={{ backgroundColor: '#1a1c24', padding: '14px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
                   <p className="code-label" style={{ marginBottom: '4px' }}>{translations.giftCode}</p>
-                  <strong className="voucher-code" style={{ color: visual.color, fontSize: '1.8rem', letterSpacing: '0.1em' }}>{result.code}</strong>
-                  <p className="result-copy" style={{ marginTop: '8px', fontSize: '0.9rem', color: '#9ba1ad' }}>{translations.giftNote}</p>
+                  <strong className="voucher-code" style={{ color: visual.color, fontSize: 'clamp(1.4rem, 5.5vw, 1.8rem)', letterSpacing: '0.08em' }}>{result.code}</strong>
+                  <p className="result-copy" style={{ marginTop: '8px', fontSize: '0.85rem', color: '#9ba1ad' }}>{translations.giftNote}</p>
                 </div>
               )}
             </div>

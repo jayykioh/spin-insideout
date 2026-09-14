@@ -36,6 +36,21 @@ export const Roulette = ({ spinning, disabled, winningPrize, hint, onSpin, onSpi
     }
   }, [spinning, winningPrize])
 
+  // Helper to get real rendered width of item + gap for pixel-perfect landing on any device
+  const getItemWidth = () => {
+    if (containerRef.current) {
+      const item = containerRef.current.querySelector<HTMLElement>('.roulette-item')
+      if (item && item.offsetWidth > 0) {
+        return item.offsetWidth + 4 // item width + 4px track gap
+      }
+    }
+    if (typeof window !== 'undefined') {
+      if (window.innerWidth <= 420) return 124
+      if (window.innerWidth <= 680) return 139
+    }
+    return ITEM_WIDTH
+  }
+
   // When a spin starts and we get the winning prize
   useEffect(() => {
     if (spinning && winningPrize && containerRef.current) {
@@ -45,11 +60,12 @@ export const Roulette = ({ spinning, disabled, winningPrize, hint, onSpin, onSpi
       const containerWidth = containerRef.current.clientWidth
       // We want the winning item to be exactly in the center of the container
       const centerOffset = containerWidth / 2
-      // Calculate exact X position to land on
-      // Add a slight random offset so it doesn't land exactly in the middle of the box every time (-40px to +40px)
-      const randomJitter = (Math.random() - 0.5) * (ITEM_WIDTH - 20)
+      const itemWidth = getItemWidth()
+
+      // Add a slight random offset so it doesn't land exactly in the middle of the box every time
+      const randomJitter = (Math.random() - 0.5) * (itemWidth * 0.35)
       
-      const targetX = (WIN_INDEX * ITEM_WIDTH) + (ITEM_WIDTH / 2) - centerOffset + randomJitter
+      const targetX = (WIN_INDEX * itemWidth) + (itemWidth / 2) - centerOffset + randomJitter
       
       setIsIdle(false)
       setXOffset(-targetX)
@@ -64,7 +80,7 @@ export const Roulette = ({ spinning, disabled, winningPrize, hint, onSpin, onSpi
         <motion.div 
           className="roulette-track"
           initial={false}
-          animate={isIdle ? { x: [0, -ITEM_WIDTH * 10] } : { x: xOffset }}
+          animate={isIdle ? { x: [0, -getItemWidth() * 8] } : { x: xOffset }}
           transition={
             isIdle 
               ? { repeat: Infinity, duration: 25, ease: 'linear' }
