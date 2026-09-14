@@ -273,6 +273,21 @@ const App = () => {
       </footer>
       
       <ResultModal result={visibleResult} onClose={() => setVisibleResult(null)} />
+
+      {import.meta.env.DEV && (
+        <button
+          type="button"
+          onClick={() => {
+            localStorage.removeItem('insideout:spin-results')
+            localStorage.removeItem('insideout:device-id')
+            window.location.reload()
+          }}
+          className="dev-reset-btn"
+          title="Reset device and spin history to test again"
+        >
+          ⟳ Reset Spin (Test Mode)
+        </button>
+      )}
     </div>
   )
 }

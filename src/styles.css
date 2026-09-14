@@ -573,3 +573,28 @@ footer > a:hover { color: #fff; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
+
+.dev-reset-btn {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 999;
+  padding: 8px 14px;
+  background: rgba(0, 0, 0, 0.85);
+  color: var(--accent);
+  border: 1px dashed var(--accent);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+}
+.dev-reset-btn:hover {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-style: solid;
+}
