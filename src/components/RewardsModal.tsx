@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react'
+import { createPortal } from 'react-dom'
 import { X } from 'lucide-react'
 import { prizeVisuals, translations } from '../content'
 
@@ -8,7 +9,9 @@ interface RewardsModalProps {
 }
 
 export const RewardsModal = ({ isOpen, onClose }: RewardsModalProps) => {
-  return (
+  if (typeof document === 'undefined') return null
+
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div 
@@ -17,6 +20,7 @@ export const RewardsModal = ({ isOpen, onClose }: RewardsModalProps) => {
           animate={{ opacity: 1 }} 
           exit={{ opacity: 0 }} 
           role="presentation"
+          onClick={onClose}
         >
           <motion.div
             className="result-modal dark-mode rewards-modal"
@@ -27,6 +31,7 @@ export const RewardsModal = ({ isOpen, onClose }: RewardsModalProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+            onClick={(e) => e.stopPropagation()}
           >
             <button className="modal-close" onClick={onClose} aria-label={translations.close}><X size={20} /></button>
             <div className="rewards-modal-content">
@@ -56,6 +61,7 @@ export const RewardsModal = ({ isOpen, onClose }: RewardsModalProps) => {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   )
 }
