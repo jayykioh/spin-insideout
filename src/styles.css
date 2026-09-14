@@ -157,8 +157,10 @@ a { color: inherit; text-decoration: none; }
   box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4);
 }
 .form-fields { display: grid; gap: 16px; }
-.entry-form label { display: flex; flex-direction: column; gap: 6px; }
-.entry-form label > span {
+.entry-form label,
+.entry-form .form-field { display: flex; flex-direction: column; gap: 6px; }
+.entry-form label > span,
+.entry-form .field-label {
   font-size: 11px;
   font-weight: 700;
   color: rgba(255, 255, 255, 0.55);
@@ -312,6 +314,15 @@ a { color: inherit; text-decoration: none; }
 
 /* Country Select */
 .country-select { position: relative; }
+.country-select.open { z-index: 70; }
+
+.country-select-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 65;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(2px);
+}
 .country-select-trigger {
   width: 100%;
   display: flex;
@@ -355,7 +366,7 @@ a { color: inherit; text-decoration: none; }
 
 .country-select-dropdown {
   position: absolute;
-  z-index: 60;
+  z-index: 70;
   top: calc(100% + 4px);
   left: 0;
   width: 100%;
@@ -606,6 +617,8 @@ footer > a:hover { color: #fff; }
   .entry-form, .verified-pass { padding: 18px 14px; gap: 14px; }
   .form-fields { gap: 12px; }
   .entry-form input, .country-select-trigger, .button { min-height: 48px; }
+  .entry-form input, .search-box input { font-size: 16px; } /* Prevents iOS Safari auto-zoom on input focus */
+  .country-item { min-height: 44px; padding: 10px 12px; font-size: 14px; }
 
   /* Mobile Focus Mode: NO huge transform scaling — fits screen naturally */
   .site-shell.focus-mode .roulette-section {

@@ -212,15 +212,15 @@ const App = () => {
                     {errors.name ? <small>{translations[errors.name]}</small> : null}
                   </label>
                   
-                  <label>
-                    <span>{translations.country}</span>
+                  <div className="form-field">
+                    <span className="field-label">{translations.country}</span>
                     <CountrySelect 
                       value={participant.country}
                       onChange={(val) => setParticipant({ ...participant, country: val })}
                       error={errors.country}
                     />
                     {errors.country ? <small>{translations[errors.country]}</small> : null}
-                  </label>
+                  </div>
                 </div>
 
                 <div className="form-footer">
