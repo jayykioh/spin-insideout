@@ -13,15 +13,19 @@ export const prizeVisuals: Record<PrizeId, {
   image?: string
   label: string
 }> = {
-  'grand': { color: '#F5C54A', accent: '#5A3513', image: '/src/images/tshirt.png', label: 'T-SHIRT' },
-  'discount-50': { color: '#F16B4E', accent: '#FFF8EC', label: '50% OFF' },
+  'grand': { color: '#F5C54A', accent: '#5A3513', image: '/images/tshirt.png', label: 'T-SHIRT' },
+  'discount-50': { color: '#F16B4E', accent: '#FFF8EC', image: '/images/50%.webp', label: '50% OFF' },
   'discount-30': { color: '#F39A4A', accent: '#48250A', label: '30% OFF' },
-  'discount-10': { color: '#A8DCC5', accent: '#173D32', label: '10% OFF' },
-  'socks': { color: '#BBA7D8', accent: '#302143', image: '/src/images/sock.png', label: 'SOCKS' },
-  'beanie': { color: '#8899A6', accent: '#15202B', label: 'BEANIE' },
-  'belt': { color: '#909090', accent: '#222222', label: 'BELT' },
-  'mystery': { color: '#78C7B6', accent: '#133F3A', label: 'MYSTERY' },
-  'try-again': { color: '#333333', accent: '#888888', label: 'NEXT TIME' },
+  'discount-10': { color: '#A8DCC5', accent: '#173D32', image: '/images/10%.png', label: '10% OFF' },
+  'discount-8': { color: '#E57373', accent: '#3E1010', image: '/images/8%.png', label: '8% OFF' },
+  'discount-5': { color: '#FFB74D', accent: '#4E2C00', image: '/images/5%.png', label: '5% OFF' },
+  'discount-3': { color: '#4FC3F7', accent: '#002E4C', image: '/images/3%.png', label: '3% OFF' },
+  'discount-2': { color: '#81C784', accent: '#0E3613', image: '/images/2%.png', label: '2% OFF' },
+  'socks': { color: '#BBA7D8', accent: '#302143', image: '/images/sock.png', label: 'SOCKS' },
+  'beanie': { color: '#8899A6', accent: '#15202B', image: '/images/beanie.jpg', label: 'BEANIE' },
+  'belt': { color: '#909090', accent: '#222222', image: '/images/belt.webp', label: 'BELT' },
+  'mystery': { color: '#78C7B6', accent: '#133F3A', image: '/images/MYSTERY.jpg', label: 'MYSTERY' },
+  'try-again': { color: '#333333', accent: '#888888', image: '/images/try-again.jpg', label: 'NEXT TIME' },
 }
 
 export { UNIQUE_COUNTRIES as COUNTRIES } from './data/countries'
@@ -32,7 +36,11 @@ export const prizeNames: Record<PrizeId, string> = {
   'discount-50': '50% off',
   'discount-30': '30% off',
   'discount-10': '10% off',
-  socks: 'Đôi tất / Pair of socks',
+  'discount-8': '8% off',
+  'discount-5': '5% off',
+  'discount-3': '3% off',
+  'discount-2': '2% off',
+  socks: 'Inside Out Socks',
   beanie: 'Inside Out Beanie',
   belt: 'Inside Out Belt',
   mystery: 'Mystery Reward',

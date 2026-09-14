@@ -3,6 +3,10 @@ export type PrizeId =
   | 'discount-50'
   | 'discount-30'
   | 'discount-10'
+  | 'discount-8'
+  | 'discount-5'
+  | 'discount-3'
+  | 'discount-2'
   | 'socks'
   | 'beanie'
   | 'belt'
@@ -22,12 +26,16 @@ export const PRIZE_PROBABILITIES: ReadonlyArray<{
 }> = [
   { id: 'grand', probability: 1 / 150 },
   { id: 'discount-50', probability: 0.015 },
-  { id: 'discount-30', probability: 0.04 },
-  { id: 'discount-10', probability: 0.09 },
+  { id: 'discount-30', probability: 0.03 },
+  { id: 'discount-10', probability: 0.08 },
+  { id: 'discount-8', probability: 0.10 },
+  { id: 'discount-5', probability: 0.12 },
+  { id: 'discount-3', probability: 0.14 },
+  { id: 'discount-2', probability: 0.16 },
   { id: 'socks', probability: 0.06 },
   { id: 'beanie', probability: 0.02 },
   { id: 'belt', probability: 0.01 },
-  { id: 'mystery', probability: 0.07 },
+  { id: 'mystery', probability: 0.05 },
 ]
 
 export const selectPrize = (randomValue: number): PrizeId => {
@@ -87,7 +95,7 @@ export const isSpinPermitted = ({
 export const generateRouletteSequence = (winningPrizeId: PrizeId, length = 100, winIndex = 85): PrizeId[] => {
   const sequence: PrizeId[] = []
   const availablePrizes: PrizeId[] = [
-    'grand', 'discount-50', 'discount-30', 'discount-10', 'socks', 'beanie', 'belt', 'mystery', 'try-again'
+    'grand', 'discount-50', 'discount-30', 'discount-10', 'discount-8', 'discount-5', 'discount-3', 'discount-2', 'socks', 'beanie', 'belt', 'mystery', 'try-again'
   ]
   
   for (let i = 0; i < length; i++) {
