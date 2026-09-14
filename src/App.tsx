@@ -104,6 +104,11 @@ const App = () => {
 
     setPendingResult(result)
     setSpinning(true)
+    
+    // Auto-center the roulette section for focus mode
+    setTimeout(() => {
+      document.getElementById('roulette-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }, 100)
   }
 
   const finishSpin = async () => {
@@ -143,7 +148,7 @@ const App = () => {
   ]
 
   return (
-    <div className="site-shell dark-theme">
+    <div className={`site-shell dark-theme ${spinning ? 'focus-mode' : ''}`}>
       <header className="topbar">
         <a className="brand" href="#top" aria-label="Inside Out home"><span>IN</span><b>OUT</b></a>
         <p className="nav-date">{translations.navDate}</p>

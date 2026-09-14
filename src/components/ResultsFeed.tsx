@@ -42,11 +42,7 @@ export const ResultsFeed = () => {
     return 'recently'
   }
 
-  const formatName = (fullName: string) => {
-    const parts = fullName.trim().split(' ')
-    if (parts.length === 1) return parts[0]
-    return `${parts[0]} ${parts[parts.length - 1].charAt(0)}.`
-  }
+  const formatName = (fullName: string) => fullName.trim()
 
   return (
     <section className="results-feed">

@@ -12,6 +12,15 @@ export type PrizeId =
   | 'belt'
   | 'mystery'
   | 'try-again'
+  | 'discount-50k'
+  | 'discount-80k'
+  | 'discount-20k'
+  | 'free-item'
+  | 'porsche'
+  | 'bugatti'
+  | 'ps5'
+  | 'iphone18'
+  | 'macbook'
 
 export interface Participant {
   name: string
@@ -24,18 +33,36 @@ export const PRIZE_PROBABILITIES: ReadonlyArray<{
   id: Exclude<PrizeId, 'try-again'>
   probability: number
 }> = [
-  { id: 'grand', probability: 1 / 150 },
-  { id: 'discount-50', probability: 0.015 },
-  { id: 'discount-30', probability: 0.03 },
-  { id: 'discount-10', probability: 0.08 },
-  { id: 'discount-8', probability: 0.10 },
-  { id: 'discount-5', probability: 0.12 },
-  { id: 'discount-3', probability: 0.14 },
-  { id: 'discount-2', probability: 0.16 },
-  { id: 'socks', probability: 0.06 },
-  { id: 'beanie', probability: 0.02 },
-  { id: 'belt', probability: 0.01 },
-  { id: 'mystery', probability: 0.05 },
+  // ── Decoration only (0%) — will never be awarded ──────────────────────────
+  { id: 'discount-50',  probability: 0 },      // 50% – troll prize
+  { id: 'discount-30',  probability: 0 },      // 30% – troll prize
+  { id: 'free-item',    probability: 0 },      // Free item – troll prize
+  { id: 'porsche',      probability: 0 },
+  { id: 'bugatti',      probability: 0 },
+  { id: 'ps5',          probability: 0 },
+  { id: 'iphone18',     probability: 0 },
+  { id: 'macbook',      probability: 0 },
+
+  // ── Rare / Low (~1/300 ≈ 0.33%) ───────────────────────────────────────────
+  { id: 'grand',        probability: 0.003 },  // T-shirt  ~1/300
+  { id: 'discount-10',  probability: 0.003 },  // 10% off  ~1/300
+  { id: 'socks',        probability: 0.004 },  // Socks    ~1/250
+
+  // ── Medium (~1/100 ≈ 1%) ──────────────────────────────────────────────────
+  { id: 'discount-80k', probability: 0.010 },  // -80k     ~1/100
+  { id: 'mystery',      probability: 0.010 },  // Mystery  ~1/100
+  { id: 'beanie',       probability: 0.010 },  // Beanie   ~1/100
+  { id: 'belt',         probability: 0.010 },  // Belt     ~1/100
+  { id: 'discount-5',   probability: 0.010 },  // 5% off   ~1/100
+
+  // ── Above average (~5-8%) ─────────────────────────────────────────────────
+  { id: 'discount-2',   probability: 0.060 },  // 2% off   ~1/17
+  { id: 'discount-3',   probability: 0.060 },  // 3% off   ~1/17
+  { id: 'discount-20k', probability: 0.050 },  // -20k     ~1/20
+  { id: 'discount-50k', probability: 0.040 },  // -50k     ~1/25
+
+  // Remainder (≈ 0.73 = ~73%) falls through to 'try-again' via selectPrize()
+  { id: 'discount-8',   probability: 0 },      // unused – kept for type coverage
 ]
 
 export const selectPrize = (randomValue: number): PrizeId => {
@@ -95,12 +122,19 @@ export const isSpinPermitted = ({
 export const generateRouletteSequence = (winningPrizeId: PrizeId, length = 100, winIndex = 85): PrizeId[] => {
   const sequence: PrizeId[] = []
   const availablePrizes: PrizeId[] = [
-    'grand', 'discount-50', 'discount-30', 'discount-10', 'discount-8', 'discount-5', 'discount-3', 'discount-2', 'socks', 'beanie', 'belt', 'mystery', 'try-again'
+    'grand', 'discount-50', 'discount-30', 'discount-10', 'discount-8', 'discount-5', 'discount-3', 'discount-2', 'socks', 'beanie', 'belt', 'mystery', 'try-again',
+    'discount-50k', 'discount-80k', 'discount-20k', 'free-item', 'porsche', 'bugatti', 'ps5', 'iphone18', 'macbook'
   ]
   
   for (let i = 0; i < length; i++) {
     if (i === winIndex) {
       sequence.push(winningPrizeId)
+    } else if (Math.abs(i - winIndex) <= 3) {
+      // Plot twist: tease the user with a sequence of big prizes right next to the winning prize
+      const teasePrizes: PrizeId[] = ['grand', 'porsche', 'iphone18', 'discount-50k', 'discount-80k', 'ps5', 'bugatti', 'macbook', 'free-item']
+      let teaseItem = teasePrizes[Math.floor(secureRandom() * teasePrizes.length)]
+      if (teaseItem === winningPrizeId) teaseItem = 'try-again'
+      sequence.push(teaseItem)
     } else {
       // Pick random prizes for the visual sequence
       let randomPrize = availablePrizes[Math.floor(secureRandom() * availablePrizes.length)]

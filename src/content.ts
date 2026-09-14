@@ -13,19 +13,28 @@ export const prizeVisuals: Record<PrizeId, {
   image?: string
   label: string
 }> = {
-  'grand': { color: '#F5C54A', accent: '#5A3513', image: '/images/tshirt.png', label: 'T-SHIRT' },
-  'discount-50': { color: '#F16B4E', accent: '#FFF8EC', image: '/images/50%.png', label: '50% OFF' },
-  'discount-30': { color: '#F39A4A', accent: '#48250A', label: '30% OFF' },
-  'discount-10': { color: '#A8DCC5', accent: '#173D32', image: '/images/10%.png', label: '10% OFF' },
-  'discount-8': { color: '#E57373', accent: '#3E1010', image: '/images/8%.png', label: '8% OFF' },
-  'discount-5': { color: '#FFB74D', accent: '#4E2C00', image: '/images/5%.png', label: '5% OFF' },
-  'discount-3': { color: '#4FC3F7', accent: '#002E4C', image: '/images/3%.png', label: '3% OFF' },
-  'discount-2': { color: '#81C784', accent: '#0E3613', image: '/images/2%.png', label: '2% OFF' },
-  'socks': { color: '#BBA7D8', accent: '#302143', image: '/images/sock.png', label: 'SOCKS' },
-  'beanie': { color: '#8899A6', accent: '#15202B', image: '/images/beanie.jpg', label: 'BEANIE' },
-  'belt': { color: '#909090', accent: '#222222', image: '/images/belt.webp', label: 'BELT' },
-  'mystery': { color: '#78C7B6', accent: '#133F3A', image: '/images/MYSTERY.jpg', label: 'MYSTERY' },
-  'try-again': { color: '#333333', accent: '#888888', image: '/images/next time.png', label: 'NEXT TIME' },
+  'grand':        { color: '#F5C54A', accent: '#5A3513', image: '/images/tshirt.png',     label: 'T-SHIRT' },
+  'discount-50':  { color: '#F16B4E', accent: '#FFF8EC', image: '/images/50%.png',        label: '50% OFF' },
+  'discount-30':  { color: '#F39A4A', accent: '#48250A',                                   label: '30% OFF' },
+  'discount-10':  { color: '#A8DCC5', accent: '#173D32', image: '/images/10%.png',        label: '10% OFF' },
+  'discount-8':   { color: '#E57373', accent: '#3E1010', image: '/images/8%.png',         label: '8% OFF' },
+  'discount-5':   { color: '#FFB74D', accent: '#4E2C00', image: '/images/5%.png',         label: '5% OFF' },
+  'discount-3':   { color: '#4FC3F7', accent: '#002E4C', image: '/images/3%.png',         label: '3% OFF' },
+  'discount-2':   { color: '#81C784', accent: '#0E3613', image: '/images/2%.png',         label: '2% OFF' },
+  'socks':        { color: '#BBA7D8', accent: '#302143', image: '/images/sock.png',       label: 'SOCKS' },
+  'beanie':       { color: '#8899A6', accent: '#15202B', image: '/images/beanie.jpg',     label: 'BEANIE' },
+  'belt':         { color: '#909090', accent: '#222222', image: '/images/belt.webp',      label: 'BELT' },
+  'mystery':      { color: '#78C7B6', accent: '#133F3A', image: '/images/MYSTERY.jpg',   label: 'MYSTERY' },
+  'try-again':    { color: '#555555', accent: '#888888', image: '/images/try-again.webp', label: 'NEXT TIME' },
+  'discount-50k': { color: '#E57373', accent: '#3E1010', image: '/images/voucher.png',   label: '-50K' },
+  'discount-80k': { color: '#F16B4E', accent: '#FFF8EC', image: '/images/voucher.png',   label: '-80K' },
+  'discount-20k': { color: '#FFB74D', accent: '#4E2C00', image: '/images/voucher.png',   label: '-20K' },
+  'free-item':    { color: '#78C7B6', accent: '#133F3A', image: '/images/free-item.jpg', label: 'FREE ITEM' },
+  'porsche':      { color: '#C8A96E', accent: '#1A1000', image: '/images/porsche.webp',  label: 'PORSCHE' },
+  'bugatti':      { color: '#1A2A6E', accent: '#000000', image: '/images/bugatti.png',   label: 'BUGATTI' },
+  'ps5':          { color: '#FFFFFF', accent: '#000000', image: '/images/ps5.png',        label: 'PS5' },
+  'iphone18':     { color: '#909090', accent: '#222222', image: '/images/iphone18.jpg',  label: 'IPHONE 18' },
+  'macbook':      { color: '#E0E0E0', accent: '#444444', image: '/images/macbook.png',   label: 'MACBOOK' },
 }
 
 export { UNIQUE_COUNTRIES as COUNTRIES } from './data/countries'
@@ -45,6 +54,15 @@ export const prizeNames: Record<PrizeId, string> = {
   belt: 'Inside Out Belt',
   mystery: 'Mystery Reward',
   'try-again': 'Try again next time',
+  'discount-50k': 'Giảm 50.000vnđ',
+  'discount-80k': 'Giảm 80.000vnđ',
+  'discount-20k': 'Giảm 20.000vnđ',
+  'free-item': '1 item may mắn của Inside Out',
+  'porsche': 'Xe Porsche',
+  'bugatti': 'Xe Bugatti',
+  'ps5': 'PS5',
+  'iphone18': 'iPhone 18 Pro Max',
+  'macbook': 'Macbook Pro',
 }
 
 export const getPrizeName = (id: PrizeId, mystery: number | null) =>
@@ -76,7 +94,7 @@ export const translations = {
   resultWin: 'This feeling is yours!',
   resultGrand: 'WOW! You are one of today’s very luckiest guests!',
   resultLose: 'Not your lucky spin this time!',
-  resultLoseBody: 'Visit us on 28 September for a 5% welcome offer.',
+  resultLoseBody: 'See you next time at Inside Out! 👋',
   giftCode: 'Gift code',
   giftNote: 'Show this code to our in-store team. It is saved on this device.',
   

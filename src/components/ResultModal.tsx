@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react'
+import confetti from 'canvas-confetti'
+import { useEffect, useRef, useState } from 'react'
 import { Download, Share2, X } from 'lucide-react'
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react'
 import { getPrizeName, translations, prizeVisuals } from '../content'
@@ -9,12 +10,38 @@ interface ResultModalProps {
   onClose: () => void
 }
 
-const bigWins = new Set(['grand', 'discount-50', 'discount-30'])
+const bigWins = new Set(['grand', 'discount-50', 'discount-30', 'discount-50k', 'discount-80k', 'free-item'])
 
 export const ResultModal = ({ result, onClose }: ResultModalProps) => {
   const [saving, setSaving] = useState(false)
   const cardRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useReducedMotion()
+
+  const isLoss = result?.prizeId === 'try-again'
+  const isWin = result && !isLoss
+
+  // Trigger fireworks confetti for every result
+  useEffect(() => {
+    if (result && !reduceMotion) {
+      const duration = 5 * 1000
+      const animationEnd = Date.now() + duration
+      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 99999, colors: ['#f28b24', '#ffffff', '#13151b', '#E57373', '#FFB74D'] }
+
+      const randomInRange = (min: number, max: number) => Math.random() * (max - min) + min
+
+      const interval: any = setInterval(function() {
+        const timeLeft = animationEnd - Date.now()
+        if (timeLeft <= 0) return clearInterval(interval)
+
+        const particleCount = 50 * (timeLeft / duration)
+        
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } })
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } })
+      }, 250)
+      
+      return () => clearInterval(interval)
+    }
+  }, [result, reduceMotion])
 
   const saveImage = async () => {
     if (!cardRef.current) return
@@ -38,8 +65,6 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
     else await navigator.clipboard.writeText(text)
   }
 
-  const isLoss = result?.prizeId === 'try-again'
-  const showConfetti = result && bigWins.has(result.prizeId) && !reduceMotion
   const visual = result ? prizeVisuals[result.prizeId] : null
 
   return (
@@ -57,29 +82,38 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
             transition={{ type: 'spring', stiffness: 280, damping: 24 }}
             onClick={(e) => e.stopPropagation()}
           >
-            {showConfetti ? <div className="confetti" aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <i key={i} style={{ '--i': i } as React.CSSProperties} />)}</div> : null}
             <button className="modal-close" onClick={onClose} aria-label={translations.close}><X size={20} /></button>
-            <div className="result-capture" ref={cardRef}>
+            <div className="result-card" ref={cardRef}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', marginBottom: '4px' }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: 600, color: '#fff' }}>{result.name}</span>
+                <span style={{ color: '#888', fontWeight: 500 }}>({result.country})</span>
+              </div>
+              <p className="result-kicker" style={{ color: visual.color, fontSize: '1.1rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                {isLoss ? translations.resultLose : 'Congratulations! You won:'}
+              </p>
+              <h2 id="result-title" className="result-name" style={{ fontSize: '2.5rem', margin: '8px 0 20px', lineHeight: 1.1, color: '#fff' }}>
+                {getPrizeName(result.prizeId, result.mysteryDiscount)}
+              </h2>
+              
               {visual.image ? (
                 <img
                   src={visual.image}
                   alt={visual.label}
                   className={`result-image ${isLoss ? 'result-image--soft' : ''}`}
+                  style={{ marginBottom: '20px' }}
                 />
               ) : (
-                <div className="result-image-placeholder"></div>
+                <div className="result-image-placeholder" style={{ marginBottom: '20px' }}></div>
               )}
-              <p className="eyebrow">Inside Out · 28 Sep 2026</p>
-              <h2 id="result-title">{result.prizeId === 'grand' ? translations.resultGrand : isLoss ? translations.resultLose : translations.resultWin}</h2>
-              <p className="result-prize" style={{ color: visual.color, backgroundColor: `${visual.color}15`, border: `1px solid ${visual.color}30` }}>
-                {getPrizeName(result.prizeId, result.mysteryDiscount)}
-              </p>
-              {isLoss ? <p className="result-copy">{translations.resultLoseBody}</p> : (
-                <>
-                  <p className="code-label">{translations.giftCode}</p>
-                  <strong className="voucher-code" style={{ color: visual.color }}>{result.code}</strong>
-                  <p className="result-copy">{translations.giftNote}</p>
-                </>
+              
+              {isLoss ? (
+                <p className="result-copy">{translations.resultLoseBody}</p>
+              ) : (
+                <div style={{ backgroundColor: '#1a1c24', padding: '16px', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' }}>
+                  <p className="code-label" style={{ marginBottom: '4px' }}>{translations.giftCode}</p>
+                  <strong className="voucher-code" style={{ color: visual.color, fontSize: '1.8rem', letterSpacing: '0.1em' }}>{result.code}</strong>
+                  <p className="result-copy" style={{ marginTop: '8px', fontSize: '0.9rem', color: '#9ba1ad' }}>{translations.giftNote}</p>
+                </div>
               )}
             </div>
             <div className="result-actions">

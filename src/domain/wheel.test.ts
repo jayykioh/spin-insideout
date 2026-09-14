@@ -9,13 +9,15 @@ import {
 
 describe('wheel domain', () => {
   it('selects prize based on probability', () => {
-    // 1 / 150 = 0.00666...
-    expect(selectPrize(0.005)).toBe('grand')
-    
-    // grand (0.00666) + discount-50 (0.015) = 0.02166...
-    expect(selectPrize(0.01)).toBe('discount-50')
-    
-    // out of bounds falls back to try-again
+    // 0% troll prizes → skip to grand at cumulative start ~0
+    // grand: 0.003, discount-10: 0.006, socks: 0.010...
+    // randomValue 0.001 → grand (first non-zero prize)
+    expect(selectPrize(0.001)).toBe('grand')
+
+    // randomValue 0.004 → discount-10 (cumulative: grand=0.003, then 0.003+0.003=0.006)
+    expect(selectPrize(0.004)).toBe('discount-10')
+
+    // out of bounds falls back to try-again (>0.27 total = remainder)
     expect(selectPrize(0.99)).toBe('try-again')
   })
 
