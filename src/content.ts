@@ -14,7 +14,7 @@ export const prizeVisuals: Record<PrizeId, {
   label: string
 }> = {
   'grand': { color: '#F5C54A', accent: '#5A3513', image: '/images/tshirt.png', label: 'T-SHIRT' },
-  'discount-50': { color: '#F16B4E', accent: '#FFF8EC', image: '/images/50%.webp', label: '50% OFF' },
+  'discount-50': { color: '#F16B4E', accent: '#FFF8EC', image: '/images/50%.png', label: '50% OFF' },
   'discount-30': { color: '#F39A4A', accent: '#48250A', label: '30% OFF' },
   'discount-10': { color: '#A8DCC5', accent: '#173D32', image: '/images/10%.png', label: '10% OFF' },
   'discount-8': { color: '#E57373', accent: '#3E1010', image: '/images/8%.png', label: '8% OFF' },
