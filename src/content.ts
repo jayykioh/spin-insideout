@@ -69,8 +69,8 @@ export const translations = {
   wheelKicker: 'Ready, set, feel!',
   wheelTitle: 'Roll for your opening gift',
   spin: 'ROLL', spinning: 'ROLLING...',
-  wheelHint: 'One turn per device.',
-  alreadyUsed: 'You have already used your spin.',
+  wheelHint: 'One turn per guest.',
+  alreadyUsed: 'Turn completed. Ready for next guest.',
   closed: 'The wheel is now closed. See you at the store!',
   
   resultWin: 'This feeling is yours!',

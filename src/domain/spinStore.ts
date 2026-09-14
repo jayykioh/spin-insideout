@@ -25,17 +25,9 @@ const readResults = (): SpinResult[] => {
 
 export const getAllResults = (): SpinResult[] => readResults()
 
-export const getDeviceId = (): string => {
-  const saved = localStorage.getItem(DEVICE_KEY)
-  if (saved) return saved
+export const getDeviceId = (): string => crypto.randomUUID()
 
-  const id = crypto.randomUUID()
-  localStorage.setItem(DEVICE_KEY, id)
-  return id
-}
-
-export const canSpin = (deviceId: string): boolean =>
-  !readResults().some((result) => result.deviceId === deviceId)
+export const canSpin = (_deviceId?: string): boolean => true
 
 export const saveSpinResult = (result: SpinResult): void => {
   const results = readResults()

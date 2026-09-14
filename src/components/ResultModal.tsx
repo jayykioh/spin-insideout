@@ -45,7 +45,7 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
   return (
     <AnimatePresence>
       {result && visual ? (
-        <motion.div className="modal-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="presentation">
+        <motion.div className="modal-backdrop" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} role="presentation" onClick={onClose}>
           <motion.div
             className="result-modal dark-mode"
             role="dialog"
@@ -55,6 +55,7 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.96 }}
             transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+            onClick={(e) => e.stopPropagation()}
           >
             {showConfetti ? <div className="confetti" aria-hidden="true">{Array.from({ length: 28 }, (_, i) => <i key={i} style={{ '--i': i } as React.CSSProperties} />)}</div> : null}
             <button className="modal-close" onClick={onClose} aria-label={translations.close}><X size={20} /></button>
@@ -85,6 +86,9 @@ export const ResultModal = ({ result, onClose }: ResultModalProps) => {
               <button className="button button--dark" onClick={saveImage} disabled={saving}><Download size={18} />{saving ? translations.saving : translations.save}</button>
               <button className="button button--outline" onClick={share}><Share2 size={18} />{translations.share}</button>
             </div>
+            <button type="button" className="button button--primary next-guest-btn" onClick={onClose}>
+              Done · Next Guest Roll →
+            </button>
           </motion.div>
         </motion.div>
       ) : null}

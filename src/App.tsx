@@ -70,23 +70,11 @@ const App = () => {
     return () => window.clearInterval(timer)
   }, [])
 
-  useEffect(() => {
-    if (!eligible) {
-      setNotice(translations.alreadyUsed)
-      setHasSpun(true)
-    }
-  }, [eligible])
-
   const submitParticipant = (event: FormEvent) => {
     event.preventDefault()
     const nextErrors = validateParticipant(participant)
     setErrors(nextErrors)
     if (Object.keys(nextErrors).length > 0) return
-
-    if (!canSpin(deviceId)) {
-      setNotice(translations.alreadyUsed)
-      return
-    }
 
     setNotice('')
     setRegistered(true)
@@ -103,10 +91,11 @@ const App = () => {
 
     const mysteryDiscount = prizeId === 'mystery' ? 5 + Math.floor(secureRandom() * 36) : null
     
+    // In store iPad kiosk mode, each guest roll has a unique UUID so Google Sheets accepts all spins
     const result: SpinResult = {
       code: createVoucherCode(),
       createdAt: new Date().toISOString(),
-      deviceId,
+      deviceId: crypto.randomUUID(),
       mysteryDiscount,
       name: participant.name.trim(),
       country: participant.country,
@@ -129,8 +118,16 @@ const App = () => {
     
     setSpinning(false)
     setVisibleResult(pendingResult)
-    setNotice(translations.alreadyUsed)
     setPendingResult(null)
+  }
+
+  const resetForNextGuest = () => {
+    setVisibleResult(null)
+    setPendingResult(null)
+    setParticipant({ name: '', country: '' })
+    setRegistered(false)
+    setHasSpun(false)
+    setNotice('')
   }
 
   const reveal = reduceMotion ? {} : {
@@ -157,13 +154,6 @@ const App = () => {
         <section className="countdown-strip" aria-label={translations.countdownTitle}>
           <p>{translations.countdownTitle}</p>
           <div className="countdown-values">{countdownItems.map(([value, label]) => <div key={label}><strong>{String(value).padStart(2, '0')}</strong><span>{label}</span></div>)}</div>
-        </section>
-
-        <section className="about-section">
-          <motion.div className="about-content" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-            <h2>{translations.aboutTitle}</h2>
-            <p>{translations.aboutBody}</p>
-          </motion.div>
         </section>
 
         <section className="form-section" id="form-section">
@@ -263,6 +253,13 @@ const App = () => {
           </motion.div>
         </section>
 
+        <section className="about-section">
+          <motion.div className="about-content" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
+            <h2>{translations.aboutTitle}</h2>
+            <p>{translations.aboutBody}</p>
+          </motion.div>
+        </section>
+
         <ResultsFeed />
       </main>
 
@@ -272,22 +269,7 @@ const App = () => {
         <a href="#social" aria-label={translations.follow}><Instagram size={18} />{translations.follow}</a>
       </footer>
       
-      <ResultModal result={visibleResult} onClose={() => setVisibleResult(null)} />
-
-      {import.meta.env.DEV && (
-        <button
-          type="button"
-          onClick={() => {
-            localStorage.removeItem('insideout:spin-results')
-            localStorage.removeItem('insideout:device-id')
-            window.location.reload()
-          }}
-          className="dev-reset-btn"
-          title="Reset device and spin history to test again"
-        >
-          ⟳ Reset Spin (Test Mode)
-        </button>
-      )}
+      <ResultModal result={visibleResult} onClose={resetForNextGuest} />
     </div>
   )
 }

@@ -11,7 +11,7 @@ describe('spinStore', () => {
     localStorage.clear()
   })
 
-  it('manages spin eligibility based on deviceId', () => {
+  it('allows multiple spins in store kiosk mode', () => {
     const deviceId = getDeviceId()
     expect(canSpin(deviceId)).toBe(true)
 
@@ -25,12 +25,14 @@ describe('spinStore', () => {
       prizeId: 'grand',
     })
 
-    expect(canSpin(deviceId)).toBe(false)
+    // Store kiosk mode permits next guests to spin
+    expect(canSpin(deviceId)).toBe(true)
   })
 
-  it('persists device id', () => {
+  it('generates unique device session id', () => {
     const id1 = getDeviceId()
     const id2 = getDeviceId()
-    expect(id1).toBe(id2)
+    expect(id1).toBeTruthy()
+    expect(id2).toBeTruthy()
   })
 })
