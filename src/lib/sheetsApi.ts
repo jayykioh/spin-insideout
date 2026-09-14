@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import type { SpinResult } from '../domain/spinStore'
+import { getAllResults } from '../domain/spinStore'
 
 const SHEET_API_URL = import.meta.env.VITE_SHEET_API_URL
 
@@ -32,7 +33,18 @@ export interface FeedItem {
 }
 
 export const fetchFeedFromSheet = async (): Promise<FeedItem[]> => {
-  if (!SHEET_API_URL) return []
+  if (!SHEET_API_URL) {
+    return getAllResults()
+      .filter((r) => r.prizeId !== 'try-again')
+      .map((r, i) => ({
+        id: r.id || `${r.code}-${i}`,
+        name: r.name,
+        country: r.country,
+        prizeId: r.prizeId,
+        createdAt: r.createdAt,
+      }))
+      .reverse()
+  }
   
   try {
     const controller = new AbortController()
