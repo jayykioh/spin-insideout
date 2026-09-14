@@ -25,7 +25,7 @@ export const prizeVisuals: Record<PrizeId, {
   'beanie': { color: '#8899A6', accent: '#15202B', image: '/images/beanie.jpg', label: 'BEANIE' },
   'belt': { color: '#909090', accent: '#222222', image: '/images/belt.webp', label: 'BELT' },
   'mystery': { color: '#78C7B6', accent: '#133F3A', image: '/images/MYSTERY.jpg', label: 'MYSTERY' },
-  'try-again': { color: '#333333', accent: '#888888', image: '/images/try-again.jpg', label: 'NEXT TIME' },
+  'try-again': { color: '#333333', accent: '#888888', image: '/images/next time.png', label: 'NEXT TIME' },
 }
 
 export { UNIQUE_COUNTRIES as COUNTRIES } from './data/countries'
