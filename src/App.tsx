@@ -84,7 +84,7 @@ const App = () => {
   const spin = () => {
     if (!spinPermitted) return
 
-    let prizeId = selectPrize(secureRandom())
+    let prizeId = selectPrize(secureRandom(), participant.name)
     if (prizeId === 'grand' && getDailyGrandPrizeCount(getEventDate()) >= APP_CONFIG.dailyGrandPrizeLimit) {
       prizeId = 'try-again'
     }
@@ -156,9 +156,20 @@ const App = () => {
       </header>
 
       <main id="top">
-        <section className="countdown-strip" aria-label={translations.countdownTitle}>
-          <p>{translations.countdownTitle}</p>
-          <div className="countdown-values">{countdownItems.map(([value, label]) => <div key={label}><strong>{String(value).padStart(2, '0')}</strong><span>{label}</span></div>)}</div>
+        <section className="countdown-strip" aria-labelledby="countdown-title">
+          <div className="countdown-intro">
+            <p className="countdown-kicker">{translations.countdownKicker}</p>
+            <h1 id="countdown-title">{translations.countdownTitle}</h1>
+            <time dateTime={APP_CONFIG.openingDate}>{translations.countdownDate}</time>
+          </div>
+          <div className="countdown-values" role="timer" aria-live="off" aria-label="Time until the grand opening">
+            {countdownItems.map(([value, label]) => (
+              <div key={label} className="countdown-unit">
+                <strong>{String(value).padStart(2, '0')}</strong>
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
         </section>
 
         <section className="form-section" id="form-section">
@@ -262,6 +273,7 @@ const App = () => {
           <motion.div className="about-content" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
             <h2>{translations.aboutTitle}</h2>
             <p>{translations.aboutBody}</p>
+            <p>{translations.aboutClosing}</p>
           </motion.div>
         </section>
 

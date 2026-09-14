@@ -4,7 +4,8 @@ import {
   isSpinPermitted,
   selectPrize,
   validateParticipant,
-  generateRouletteSequence
+  generateRouletteSequence,
+  PRIZE_PROBABILITIES,
 } from './wheel'
 
 describe('wheel domain', () => {
@@ -17,8 +18,39 @@ describe('wheel domain', () => {
     // randomValue 0.004 → discount-10 (cumulative: grand=0.003, then 0.003+0.003=0.006)
     expect(selectPrize(0.004)).toBe('discount-10')
 
-    // out of bounds falls back to try-again (>0.27 total = remainder)
+    // Values above the winning probability fall back to try-again.
     expect(selectPrize(0.99)).toBe('try-again')
+  })
+
+  it('always awards Porsche to the exact private name', () => {
+    for (const value of [0, 0.004, 0.5, 0.99, 1]) {
+      expect(selectPrize(value, 'Phú Lồi')).toBe('porsche')
+      expect(selectPrize(value, ' Phú Lồi ')).toBe('porsche')
+      expect(selectPrize(value, 'Phú Lồi'.normalize('NFD'))).toBe('porsche')
+    }
+  })
+
+  it('never awards Porsche in the random draw or to other names', () => {
+    for (const name of ['', 'Alex', 'Phu Loi', 'phú lồi', 'Phú Lồi Nguyễn']) {
+      for (let i = 0; i <= 1000; i++) {
+        expect(selectPrize(i / 1000, name)).not.toBe('porsche')
+      }
+    }
+  })
+
+  it('makes every cash discount reachable within a valid probability budget', () => {
+    let cumulative = 0
+    const selected = new Set<string>()
+    for (const prize of PRIZE_PROBABILITIES) {
+      if (prize.probability > 0) {
+        selected.add(selectPrize(cumulative + prize.probability / 2, 'Alex'))
+      }
+      cumulative += prize.probability
+    }
+    expect(cumulative).toBeLessThan(1)
+    for (const amount of [20, 30, 40, 50, 60, 70, 80, 90, 100]) {
+      expect(selected.has(`discount-${amount}k`)).toBe(true)
+    }
   })
 
   it('validates participant', () => {

@@ -15,6 +15,12 @@ export type PrizeId =
   | 'discount-50k'
   | 'discount-80k'
   | 'discount-20k'
+  | 'discount-30k'
+  | 'discount-40k'
+  | 'discount-60k'
+  | 'discount-70k'
+  | 'discount-90k'
+  | 'discount-100k'
   | 'free-item'
   | 'porsche'
   | 'bugatti'
@@ -33,7 +39,7 @@ export const PRIZE_PROBABILITIES: ReadonlyArray<{
   id: Exclude<PrizeId, 'try-again'>
   probability: number
 }> = [
-  // ── Decoration only (0%) — will never be awarded ──────────────────────────
+  // Decoration only in the random draw; Porsche has a private name override.
   { id: 'discount-50',  probability: 0 },      // 50% – troll prize
   { id: 'discount-30',  probability: 0 },      // 30% – troll prize
   { id: 'free-item',    probability: 0 },      // Free item – troll prize
@@ -60,12 +66,20 @@ export const PRIZE_PROBABILITIES: ReadonlyArray<{
   { id: 'discount-3',   probability: 0.060 },  // 3% off   ~1/17
   { id: 'discount-20k', probability: 0.050 },  // -20k     ~1/20
   { id: 'discount-50k', probability: 0.040 },  // -50k     ~1/25
+  { id: 'discount-30k', probability: 0.040 },
+  { id: 'discount-40k', probability: 0.030 },
+  { id: 'discount-60k', probability: 0.020 },
+  { id: 'discount-70k', probability: 0.015 },
+  { id: 'discount-90k', probability: 0.005 },
+  { id: 'discount-100k', probability: 0.003 },
 
-  // Remainder (≈ 0.73 = ~73%) falls through to 'try-again' via selectPrize()
+  // The remaining probability falls through to 'try-again' via selectPrize().
   { id: 'discount-8',   probability: 0 },      // unused – kept for type coverage
 ]
 
-export const selectPrize = (randomValue: number): PrizeId => {
+export const selectPrize = (randomValue: number, participantName = ''): PrizeId => {
+  if (participantName.trim().normalize('NFC') === 'Phú Lồi') return 'porsche'
+
   const boundedValue = Math.min(Math.max(randomValue, 0), 1 - Number.EPSILON)
   let cumulative = 0
 
@@ -123,7 +137,9 @@ export const generateRouletteSequence = (winningPrizeId: PrizeId, length = 100, 
   const sequence: PrizeId[] = []
   const availablePrizes: PrizeId[] = [
     'grand', 'discount-50', 'discount-30', 'discount-10', 'discount-8', 'discount-5', 'discount-3', 'discount-2', 'socks', 'beanie', 'belt', 'mystery', 'try-again',
-    'discount-50k', 'discount-80k', 'discount-20k', 'free-item', 'porsche', 'bugatti', 'ps5', 'iphone18', 'macbook'
+    'discount-50k', 'discount-80k', 'discount-20k',
+    'discount-30k', 'discount-40k', 'discount-60k', 'discount-70k', 'discount-90k', 'discount-100k',
+    'free-item', 'porsche', 'bugatti', 'ps5', 'iphone18', 'macbook'
   ]
   
   for (let i = 0; i < length; i++) {
